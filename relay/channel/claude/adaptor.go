@@ -47,6 +47,9 @@ func (a *Adaptor) Init(info *relaycommon.RelayInfo) {
 
 func (a *Adaptor) GetRequestURL(info *relaycommon.RelayInfo) (string, error) {
 	if a.RequestMode == RequestModeMessage {
+		if strings.HasPrefix(info.BaseUrl, "https://genaiapi.cloudsway.net") {
+			return info.BaseUrl, nil
+		}
 		return fmt.Sprintf("%s/v1/messages", info.BaseUrl), nil
 	} else {
 		return fmt.Sprintf("%s/v1/complete", info.BaseUrl), nil
