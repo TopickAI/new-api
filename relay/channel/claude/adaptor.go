@@ -58,7 +58,11 @@ func (a *Adaptor) GetRequestURL(info *relaycommon.RelayInfo) (string, error) {
 
 func (a *Adaptor) SetupRequestHeader(c *gin.Context, req *http.Header, info *relaycommon.RelayInfo) error {
 	channel.SetupApiRequestHeader(info, c, req)
-	req.Set("x-api-key", info.ApiKey)
+	if strings.HasPrefix(info.BaseUrl, "https://genaiapi.cloudsway.net") {
+		req.Set("Authorization", fmt.Sprintf("Bearer %s", info.ApiKey))
+	} else {
+		req.Set("x-api-key", info.ApiKey)
+	}
 	anthropicVersion := c.Request.Header.Get("anthropic-version")
 	if anthropicVersion == "" {
 		anthropicVersion = "2023-06-01"
